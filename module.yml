@@ -19,7 +19,7 @@ Parameters:
   NlbModule:
     Description: 'Stack name of nlb module.'
     Type: String
-  VpcStack:
+  VpcModule:
     Description: 'Stack name of vpc module.'
     Type: String
   Port:
