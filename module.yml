@@ -14,7 +14,7 @@
 # limitations under the License.
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'cfn-modules: ECS NLB listener and target'
-# cfn-modules:implements(ExposeArn, ExposeSecurityGroupId)
+# cfn-modules:implements(Target)
 Parameters:
   NlbModule:
     Description: 'Stack name of nlb module.'
@@ -72,7 +72,7 @@ Outputs:
   ModuleId:
     Value: 'ecs-nlb-listener-and-target'
   ModuleVersion:
-    Value: '1.0.2'
+    Value: '1.0.3'
   StackName:
     Value: !Ref 'AWS::StackName'
   Arn:
