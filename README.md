@@ -27,6 +27,7 @@ Resources:
         NlbModule: !GetAtt 'Nlb.Outputs.StackName' # required
         VpcModule: !GetAtt 'Vpc.Outputs.StackName' # required
         Port: '80' # optional
+        CertificateArn: '' # optional
         DeregistrationDelayInSeconds: '60' # optional
       TemplateURL: './node_modules/@cfn-modules/ecs-nlb-listener-and-target/module.yml'
 ```
@@ -62,6 +63,13 @@ Resources:
       <td>Port</td>
       <td>The port on which the listener listens for requests</td>
       <td>80</td>
+      <td>no</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>CertificateArn</td>
+      <td>Amazon Resource Name (ARN) of the certificate to associate with the listener</td>
+      <td></td>
       <td>no</td>
       <td></td>
     </tr>
