@@ -27,6 +27,8 @@ Resources:
         NlbModule: !GetAtt 'Nlb.Outputs.StackName' # required
         VpcModule: !GetAtt 'Vpc.Outputs.StackName' # required
         Port: '80' # optional
+        Protocol: TCP # optional
+        TargetProtocol: TCP # optional
         CertificateArn: '' # optional
         DeregistrationDelayInSeconds: '60' # optional
       TemplateURL: './node_modules/@cfn-modules/ecs-nlb-listener-and-target/module.yml'
@@ -73,6 +75,20 @@ none
       <td>80</td>
       <td>no</td>
       <td></td>
+    </tr>
+    <tr>
+      <td>Protocol</td>
+      <td>The protocol of the listener (if you specify a CertificateArn the value is ignored and TLS is used)</td>
+      <td>TCP</td>
+      <td>no</td>
+      <td>[TCP, TCP_UDP, UDP]</td>
+    </tr>
+    <tr>
+      <td>TargetProtocol</td>
+      <td>The protocol to use for routing traffic to the targets</td>
+      <td>TCP</td>
+      <td>no</td>
+      <td>[TCP, TLS, TCP_UDP, UDP]</td>
     </tr>
     <tr>
       <td>CertificateArn</td>

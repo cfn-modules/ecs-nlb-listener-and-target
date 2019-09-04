@@ -26,6 +26,16 @@ Parameters:
     Description: 'The port on which the listener listens for requests.'
     Type: Number
     Default: 80
+  Protocol:
+    Description: 'The protocol of the listener (if you specify a CertificateArn the value is ignored and TLS is used).'
+    Type: String
+    AllowedValues: [TCP, TCP_UDP, UDP]
+    Default: TCP
+  TargetProtocol:
+    Description: 'The protocol to use for routing traffic to the targets.'
+    Type: String
+    AllowedValues: [TCP, TLS, TCP_UDP, UDP]
+    Default: TCP
   CertificateArn:
     Description: 'Optional Amazon Resource Name (ARN) of the certificate to associate with the listener.'
     Type: String
@@ -49,7 +59,7 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2 # NLB only supports the same number as HealthyThresholdCount
       Port: 8080 # overriden when containers are attached
-      Protocol: TCP
+      Protocol: !Ref TargetProtocol
       TargetType: ip
       TargetGroupAttributes:
       - Key: 'deregistration_delay.timeout_seconds'
@@ -64,7 +74,7 @@ Resources:
         Type: forward
       LoadBalancerArn: {'Fn::ImportValue': !Sub '${NlbModule}-Arn'}
       Port: !Ref Port
-      Protocol: !If [HasCertificateArn, TLS, TCP]
+      Protocol: !If [HasCertificateArn, TLS, !Ref Protocol]
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -79,7 +89,7 @@ Outputs:
   ModuleId:
     Value: 'ecs-nlb-listener-and-target'
   ModuleVersion:
-    Value: '1.1.0'
+    Value: '1.2.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Arn:
