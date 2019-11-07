@@ -26,18 +26,13 @@ Parameters:
     Description: 'The port on which the listener listens for requests.'
     Type: Number
     Default: 80
-  Protocol:
-    Description: 'The protocol of the listener (if you specify a CertificateArn the value is ignored and TLS is used).'
+  ProtocolMode:
+    Description: 'The protocol of the listener and target.'
     Type: String
-    AllowedValues: [TCP, TCP_UDP, UDP]
-    Default: TCP
-  TargetProtocol:
-    Description: 'The protocol to use for routing traffic to the targets.'
-    Type: String
-    AllowedValues: [TCP, TLS, TCP_UDP, UDP]
+    AllowedValues: [TCP, UDP, TCP_UDP]
     Default: TCP
   CertificateArn:
-    Description: 'Optional Amazon Resource Name (ARN) of the certificate to associate with the listener.'
+    Description: 'Optional Amazon Resource Name (ARN) of the certificate to associate with the listener (ignored if ProtocolMode is not set to TCP).'
     Type: String
     Default: ''
   DeregistrationDelayInSeconds:
@@ -48,7 +43,10 @@ Parameters:
     MinValue: 0
     MaxValue: 3600
 Conditions:
+  HasProtocolModeTcp: !Equals [!Ref ProtocolMode, TCP]
+  HasProtocolModeUdp: !Equals [!Ref ProtocolMode, UDP]
   HasCertificateArn: !Not [!Equals [!Ref CertificateArn, '']]
+  HasCertificateArnAndProtocolModeTcp: !And [!Condition HasCertificateArn, !Condition HasProtocolModeTcp]
 Resources:
   TargetGroup:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
@@ -59,7 +57,7 @@ Resources:
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2 # NLB only supports the same number as HealthyThresholdCount
       Port: 8080 # overriden when containers are attached
-      Protocol: !Ref TargetProtocol
+      Protocol: !If [HasProtocolModeTcp, TCP, !If [HasProtocolModeUdp, UDP, TCP_UDP]]
       TargetType: ip
       TargetGroupAttributes:
       - Key: 'deregistration_delay.timeout_seconds'
@@ -68,13 +66,13 @@ Resources:
   Listener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
-      Certificates: !If [HasCertificateArn, [{CertificateArn: !Ref CertificateArn}], !Ref 'AWS::NoValue']
+      Certificates: !If [HasCertificateArnAndProtocolModeTcp, [{CertificateArn: !Ref CertificateArn}], !Ref 'AWS::NoValue']
       DefaultActions:
       - TargetGroupArn: !Ref TargetGroup
         Type: forward
       LoadBalancerArn: {'Fn::ImportValue': !Sub '${NlbModule}-Arn'}
       Port: !Ref Port
-      Protocol: !If [HasCertificateArn, TLS, !Ref Protocol]
+      Protocol: !If [HasProtocolModeTcp, !If [HasCertificateArn, TLS, TCP], !If [HasProtocolModeUdp, UDP, TCP_UDP]]
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:

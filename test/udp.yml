@@ -23,5 +23,5 @@ Resources:
       Parameters:
         NlbModule: !GetAtt 'Nlb.Outputs.StackName'
         VpcModule: !GetAtt 'Vpc.Outputs.StackName'
-        Protocol: UDP
+        ProtocolMode: UDP
       TemplateURL: './node_modules/@cfn-modules/ecs-nlb-listener-and-target/module.yml'
