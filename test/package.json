@@ -6,6 +6,7 @@
     "@cfn-modules/test": "0.7.3",
     "@cfn-modules/vpc": "1.1.1",
     "@cfn-modules/nlb": "1.1.0",
+    "@cfn-modules/client-sg": "1.0.0",
     "@cfn-modules/ecs-nlb-listener-and-target": "file:../"
   },
   "scripts": {

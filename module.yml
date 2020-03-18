@@ -30,6 +30,10 @@ Parameters:
     Description: 'Optional Amazon Resource Name (ARN) of the certificate to associate with the listener.'
     Type: String
     Default: ''
+  ClientSgModule:
+    Description: 'Optional stack name of client-sg module (requires NLB Scheme := internal).'
+    Type: String
+    Default: ''
   DeregistrationDelayInSeconds:
     Description: 'The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused.'
     Type: Number
@@ -39,6 +43,8 @@ Parameters:
     MaxValue: 3600
 Conditions:
   HasCertificateArn: !Not [!Equals [!Ref CertificateArn, '']]
+  HasClientSgModule: !Not [!Equals [!Ref ClientSgModule, '']]
+  HasNotClientSgModule: !Not [!Condition HasClientSgModule]
 Resources:
   TargetGroup:
     Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
@@ -70,16 +76,29 @@ Resources:
     Properties:
       GroupDescription: !Ref 'AWS::StackName'
       VpcId: {'Fn::ImportValue': !Sub '${VpcModule}-Id'}
-      SecurityGroupIngress:
-      - FromPort: !Ref Port
-        ToPort: !Ref Port
-        IpProtocol: tcp
-        CidrIp: '0.0.0.0/0'
+  SecurityGroupInWorld:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Condition: HasNotClientSgModule
+    Properties:
+      GroupId: !Ref SecurityGroup
+      IpProtocol: tcp
+      FromPort: !Ref Port
+      ToPort: !Ref Port
+      CidrIp: '0.0.0.0/0'
+  SecurityGroupInClientSg:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Condition: HasClientSgModule
+    Properties:
+      GroupId: !Ref SecurityGroup
+      IpProtocol: tcp
+      FromPort: !Ref Port
+      ToPort: !Ref Port
+      SourceSecurityGroupId: {'Fn::ImportValue': !Sub '${ClientSgModule}-SecurityGroupId'}
 Outputs:
   ModuleId:
     Value: 'ecs-nlb-listener-and-target'
   ModuleVersion:
-    Value: '1.1.0'
+    Value: '1.2.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Arn:
