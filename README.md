@@ -84,7 +84,7 @@ none
     </tr>
     <tr>
       <td>ClientSgModule</td>
-      <td>Stack name of <a href="https://www.npmjs.com/package/@cfn-modules/client-sg">client-sg module</a> where traffic is allowed from on port $Port to the listener</td>
+      <td>Stack name of <a href="https://www.npmjs.com/package/@cfn-modules/client-sg">client-sg module</a> where traffic is allowed from on port $Port to the listener (requires NLB Scheme := internal)</td>
       <td></td>
       <td>no</td>
       <td></td>
