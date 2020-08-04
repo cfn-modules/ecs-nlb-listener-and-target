@@ -30,6 +30,7 @@ Resources:
         CertificateArn: '' # optional
         ClientSgModule: '' # optional
         DeregistrationDelayInSeconds: '60' # optional
+        Protocol: 'TCP' # optional
       TemplateURL: './node_modules/@cfn-modules/ecs-nlb-listener-and-target/module.yml'
 ```
 
@@ -95,6 +96,13 @@ none
       <td>60</td>
       <td>no</td>
       <td>0-3600</td>
+    </tr>
+    <tr>
+      <td>Protocol</td>
+      <td>The protocol for connections from clients to the load balancer.</td>
+      <td>TCP</td>
+      <td>no</td>
+      <td>[TCP, UDP, TCP_UDP]</td>
     </tr>
   </tbody>
 </table>
