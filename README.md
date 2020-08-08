@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/cfn-modules/ecs-nlb-listener-and-target.svg?branch=master)](https://travis-ci.org/cfn-modules/ecs-nlb-listener-and-target)
-[![NPM version](https://img.shields.io/npm/v/@cfn-modules/ecs-nlb-listener-and-target.svg)](https://www.npmjs.com/package/@cfn-modules/ecs-nlb-listener-and-target)
-
 # cfn-modules: ECS NLB listener and target
 
 ECS NLB listener and target.
