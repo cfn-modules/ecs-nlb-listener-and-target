@@ -4,13 +4,16 @@
   "description": "ECS NLB listener and target",
   "author": "Michael Wittig <michael@widdix.de>",
   "license": "Apache-2.0",
-  "keywords": ["cfn-modules", "cfn-modules:Target"],
+  "keywords": [
+    "cfn-modules",
+    "cfn-modules:Target"
+  ],
   "homepage": "https://github.com/cfn-modules",
   "bugs": {
     "url": "https://github.com/cfn-modules/ecs-nlb-listener-and-target/issues"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/cfn-modules/ecs-nlb-listener-and-target.git"
+    "type": "git",
+    "url": "https://github.com/cfn-modules/ecs-nlb-listener-and-target.git"
   }
 }
